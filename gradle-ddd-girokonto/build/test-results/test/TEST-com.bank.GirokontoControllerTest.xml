@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.bank.GirokontoControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-16T15:25:38.746Z" hostname="IT-NB-N2FIZRHTC" time="0.741">
+  <properties/>
+  <testcase name="testGetGirokontoByIban()" classname="com.bank.GirokontoControllerTest" time="0.741"/>
+  <system-out><![CDATA[16:25:30.189 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.bank.GirokontoControllerTest]: GirokontoControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:25:30.739 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.bank.Application for test class com.bank.GirokontoControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.0.1)
+
+ INFO b.GirokontoControllerTest : Starting GirokontoControllerTest using Java 17.0.0.1 with PID 20584 (started by U0554 in C:\data\DomainDrivenDesign\gradle-ddd-girokonto)
+-DEBUG b.GirokontoControllerTest : Running with Spring Boot v4.0.1, Spring v7.0.2
+- INFO b.GirokontoControllerTest : No active profile set, falling back to 1 default profile: "default"
+- INFO ingBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+- INFO w.s.TestDispatcherServlet : Initializing Servlet ''
+- INFO w.s.TestDispatcherServlet : Completed initialization in 5 ms
+- INFO b.GirokontoControllerTest : Started GirokontoControllerTest in 7.664 seconds (process running for 12.726)
+-]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

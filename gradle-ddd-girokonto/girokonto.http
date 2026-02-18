@@ -1,0 +1,19 @@
+GET http://localhost:8080/api/girokonten
+
+###
+GET http://localhost:8080/api/girokonten/DE12345678901234567890
+
+###
+GET http://localhost:8080/api/girokonten/DE12345678901234567891
+
+###
+POST http://localhost:8080/api/girokonten
+Content-Type: application/json
+
+{
+  "iban": { "value": "DE12345678901234567891" },
+  "inhaberId": { "value": "INHABER123" }
+}
+
+###
+DELETE http://localhost:8080/api/girokonten/DE12345678901234567891
