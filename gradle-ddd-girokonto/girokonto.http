@@ -1,13 +1,17 @@
 GET http://localhost:8080/api/girokonten
+X-Auth-Token: geheim
 
 ###
 GET http://localhost:8080/api/girokonten/DE12345678901234567890
+X-Auth-Token: geheim
 
 ###
 GET http://localhost:8080/api/girokonten/DE12345678901234567891
+X-Auth-Token: geheim
 
 ###
 POST http://localhost:8080/api/girokonten
+X-Auth-Token: geheim
 Content-Type: application/json
 
 {
@@ -17,3 +21,4 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/api/girokonten/DE12345678901234567891
+X-Auth-Token: geheim

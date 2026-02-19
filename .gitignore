@@ -1,0 +1,6 @@
+Dok1.docx
+src/main/resources/serverkeystore.jks
+build/
+.gradle/
+vscode/
+../.gitignore

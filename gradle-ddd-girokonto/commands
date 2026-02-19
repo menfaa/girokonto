@@ -8,3 +8,6 @@ ALTER TABLE kontoauszug ALTER COLUMN haendler DROP NOT NULL;
 ALTER TABLE kontoauszug ALTER COLUMN kartennummer DROP NOT NULL;
 ALTER TABLE kontoauszug ALTER COLUMN empfaenger_iban DROP NOT NULL;
 ALTER TABLE kontoauszug ALTER COLUMN empfaenger_name DROP NOT NULL;
+
+
+keytool -genkeypair -alias serverkey -keyalg RSA -keysize 2048 -keystore serverkeystore.jks -storepass geheim123 -validity 3650

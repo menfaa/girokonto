@@ -1,8 +1,8 @@
 package com.bank;
 
 import com.bank.konto.Girokonto;
-import com.bank.konto.GirokontoService;
 import com.bank.konto.IBAN;
+import com.bank.service.GirokontoService;
 import com.bank.controller.GirokontoController;
 import com.bank.inhaber.InhaberID;
 import org.junit.jupiter.api.Test;

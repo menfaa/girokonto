@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.bank.execptions.NoGirokontoFoundException;
 import com.bank.konto.Girokonto;
-import com.bank.konto.GirokontoService;
 import com.bank.konto.IBAN;
+import com.bank.service.GirokontoService;
+
 import java.util.Optional;
 
 @RestController

@@ -1,13 +1,17 @@
 package com.bank;
 
+import com.bank.konto.Betrag;
 import com.bank.konto.Girokonto;
-import com.bank.konto.GirokontoService;
 import com.bank.konto.IBAN;
-import com.bank.konto.Kartenzahlung;
 import com.bank.konto.Kontoauszug;
 import com.bank.konto.Kontostand;
-import com.bank.konto.SEPAUeberweisung;
+import com.bank.service.GirokontoService;
+import com.bank.service.PaymentService;
+import com.bank.api.PaymentStrategy;
+import com.bank.impl.KartenPaymentStrategy;
+import com.bank.impl.SepaPaymentStrategy;
 import com.bank.inhaber.InhaberID;
+import com.bank.security.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,78 +23,83 @@ import java.util.List;
 @Service
 public class DemoService {
 
-    private static final Logger log = LoggerFactory.getLogger(DemoService.class);
+        private static final Logger log = LoggerFactory.getLogger(DemoService.class);
 
-    private final GirokontoService girokontoService;
+        private final GirokontoService girokontoService;
+        private final PaymentService paymentService;
 
-    public DemoService(GirokontoService girokontoService) {
-        this.girokontoService = girokontoService;
-    }
+        public DemoService(GirokontoService girokontoService, PaymentService paymentService) {
+                this.girokontoService = girokontoService;
+                this.paymentService = paymentService;
+        }
 
-    @Transactional
-    public void demoAblauf() {
-        // 1. Girokonto anlegen
-        IBAN iban = new IBAN("DE12345678901234567890");
-        InhaberID inhaberId = new InhaberID("INHABER123");
-        Girokonto girokonto = new Girokonto(iban, inhaberId);
+        @Transactional
+        public void demoAblauf() {
+                // 1. Girokonto anlegen
+                IBAN iban = new IBAN("DE12345678901234567890");
+                InhaberID inhaberId = new InhaberID("INHABER123");
+                Girokonto girokonto = new Girokonto(iban, inhaberId);
 
-        log.info("Neues Girokonto angelegt: {}", girokonto);
+                log.info("Neues Girokonto angelegt: {}", girokonto);
 
-        Kontostand kontostand = girokonto.getKontostand();
-        log.info("Aktueller Kontostand: {} EUR", kontostand.betrag());
+                Kontostand kontostand = girokonto.getKontostand();
+                log.info("Aktueller Kontostand: {} EUR", kontostand.betrag().wert());
 
-        // 2. Einzahlung (Kontoauszug) hinzufügen
-        Kontoauszug einzahlung = new Kontoauszug(
-                iban,
-                LocalDate.now(),
-                500.0,
-                "Ersteinzahlung");
-        girokonto.addKontoauszug(einzahlung);
+                // Token generieren
+                String token = TokenUtil.generateToken(iban.getValue());
+                log.info("PKI-Token für IBAN {}: {}", iban.getValue(), token);
 
-        log.info("Einzahlung hinzugefügt: {}", einzahlung);
+                // 2. Einzahlung (Kontoauszug) hinzufügen
+                Betrag betrag = new Betrag(500);
+                Kontoauszug einzahlung = new Kontoauszug(
+                                iban,
+                                LocalDate.now(),
+                                betrag,
+                                "Ersteinzahlung");
+                girokonto.addKontoauszug(einzahlung);
 
-        // 3. Auszahlung (Kontoauszug) hinzufügen
-        Kontoauszug auszahlung = new Kontoauszug(
-                iban,
-                LocalDate.now(),
-                -200.0,
-                "Erstauszahlung");
+                // Token-Check vor save
+                if (TokenUtil.validateToken(iban.getValue(), token)) {
+                        girokontoService.save(girokonto);
+                        log.info("Einzahlung hinzugefügt und gespeichert: {}", einzahlung);
+                } else {
+                        log.warn("Token ungültig, Einzahlung nicht gespeichert!");
+                }
 
-        girokonto.addKontoauszug(auszahlung);
-        log.info("Auszahlung hinzugefügt: {}", auszahlung);
+                // 3. Auszahlung (Kontoauszug) hinzufügen
+                betrag = new Betrag(-200);
+                Kontoauszug auszahlung = new Kontoauszug(
+                                iban,
+                                LocalDate.now(),
+                                betrag,
+                                "Erstauszahlung");
 
-        Kontoauszug sepa = new SEPAUeberweisung(
-                iban,
-                LocalDate.now(),
-                -100.0,
-                "Miete",
-                "DE44556677889900112233",
-                "Vermieter GmbH");
+                girokonto.addKontoauszug(auszahlung);
 
-        Kontoauszug karte = new Kartenzahlung(
-                iban,
-                LocalDate.now(),
-                -20.0,
-                "Supermarkt",
-                "1234-5678-9012-3456",
-                "EDEKA");
+                // Token-Check vor save
+                if (TokenUtil.validateToken(iban.getValue(), token)) {
+                        girokontoService.save(girokonto);
+                        log.info("Auszahlung hinzugefügt und gespeichert: {}", auszahlung);
+                } else {
+                        log.warn("Token ungültig, Auszahlung nicht gespeichert!");
+                }
 
-        // 5. Sepa (Kontoauszug) hinzufügen
-        girokonto.addKontoauszug(sepa);
+                // 4. Zahlungen ausführen (hier kein Token-Check, da kein save)
+                betrag = new Betrag(1000.0);
+                PaymentStrategy sepa = new SepaPaymentStrategy("DE44556677889900112233", "Vermieter GmbH");
+                paymentService.processPayment("DE12345678901234567890", betrag, "Miete", sepa);
 
-        // 5. Karten (Kontoauszug) hinzufügen
-        girokonto.addKontoauszug(karte);
+                betrag = new Betrag(50.0);
+                PaymentStrategy karte = new KartenPaymentStrategy("1234-5678-9012-3456", "EDEKA");
+                paymentService.processPayment("DE12345678901234567890", betrag, "Supermarkt", karte);
 
-        // 4. Girokonto speichern
-        girokontoService.save(girokonto);
+                // 5. Girokonto erneut laden und Kontostand/Auszüge ausgeben
+                girokonto = girokontoService.findByIbanWithKontoauszuege(girokonto.getIban().getValue()).orElseThrow();
+                kontostand = girokonto.getKontostand();
+                log.info("Aktueller Kontostand nach Auszahlung: {} EUR", kontostand.betrag().wert());
 
-        // 5. Girokonto erneut laden und Kontostand/Auszüge ausgeben
-        girokonto = girokontoService.findByIbanWithKontoauszuege(girokonto.getIban().getValue()).orElseThrow();
-        kontostand = girokonto.getKontostand();
-        log.info("Aktueller Kontostand nach Auszahlung: {} EUR", kontostand.betrag());
-
-        log.info("Alle Kontoauszüge:");
-        List<Kontoauszug> kontoauzuege = girokonto.getKontoauszuege();
-        kontoauzuege.forEach(auszug -> log.info(auszug.toString()));
-    }
+                log.info("Alle Kontoauszüge:");
+                List<Kontoauszug> kontoauzuege = girokonto.getKontoauszuege();
+                kontoauzuege.forEach(auszug -> log.info(auszug.toString()));
+        }
 }

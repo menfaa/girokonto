@@ -30,7 +30,7 @@ public class Girokonto {
     private List<Kontoauszug> kontoauszuege = new ArrayList<>(); // Liste der Kontoauszüge
 
     @Embedded // Das Feld ist ein eingebettetes Value Object (Kontostand)
-    private Kontostand kontostand = new Kontostand(0.0); // Initialer Kontostand ist 0.0
+    private Kontostand kontostand = new Kontostand(new Betrag(0.0)); // Initialer Kontostand ist 0.0
 
     protected Girokonto() {
         // Geschützter Standardkonstruktor für JPA (wird für das Laden aus der DB
@@ -58,14 +58,16 @@ public class Girokonto {
     public void addKontoauszug(Kontoauszug kontoauszug) {
         kontoauszuege.add(kontoauszug); // Fügt einen Kontoauszug zur Liste hinzu
         // Optional: Kontostand aktualisieren
-        this.kontostand = new Kontostand(this.kontostand.betrag() + kontoauszug.getBetrag());
+        Betrag betrag = new Betrag(this.kontostand.betrag().wert() + kontoauszug.getBetrag().wert());
+        this.kontostand = new Kontostand(betrag);
     }
 
     // Methode zum Entfernen eines Kontoauszugs
     public void removeKontoauszug(Kontoauszug kontoauszug) {
         kontoauszuege.remove(kontoauszug); // Entfernt einen Kontoauszug aus der Liste
         // Optional: Kontostand aktualisieren
-        this.kontostand = new Kontostand(this.kontostand.betrag() - kontoauszug.getBetrag());
+        Betrag betrag = new Betrag(this.kontostand.betrag().wert() - kontoauszug.getBetrag().wert());
+        this.kontostand = new Kontostand(betrag);
     }
 
     public Kontostand getKontostand() {

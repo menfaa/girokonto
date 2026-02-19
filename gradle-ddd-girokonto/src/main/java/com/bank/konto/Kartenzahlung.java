@@ -21,7 +21,7 @@ public class Kartenzahlung extends Kontoauszug { // Kartenzahlung erbt von Konto
         // benötigt)
     }
 
-    public Kartenzahlung(IBAN girokontoIban, LocalDate datum, double betrag, String verwendungszweck,
+    public Kartenzahlung(IBAN girokontoIban, LocalDate datum, Betrag betrag, String verwendungszweck,
             String kartennummer, String haendler) {
         super(girokontoIban, datum, betrag, verwendungszweck); // Aufruf des Konstruktors der Basisklasse
         this.kartennummer = kartennummer; // Setzt die Kartennummer
@@ -50,7 +50,7 @@ public class Kartenzahlung extends Kontoauszug { // Kartenzahlung erbt von Konto
                 "id=" + getId() + // ID aus der Basisklasse
                 ", girokontoIban=" + getGirokontoIban() + // IBAN aus der Basisklasse
                 ", datum=" + getDatum() + // Datum aus der Basisklasse
-                ", betrag=" + getBetrag() + // Betrag aus der Basisklasse
+                ", betrag=" + getBetrag().wert() + // Betrag aus der Basisklasse
                 ", verwendungszweck='" + getVerwendungszweck() + '\'' + // Verwendungszweck aus der Basisklasse
                 ", kartennummer='" + kartennummer + '\'' + // Kartennummer aus dieser Klasse
                 ", haendler='" + haendler + '\'' + // Händlernamen aus dieser Klasse

@@ -25,7 +25,11 @@ public class Kontoauszug {
     private LocalDate datum; // Buchungsdatum
 
     @Column(nullable = false)
-    private double betrag; // Betrag (positiv = Einzahlung, negativ = Auszahlung)
+    @Embedded
+    // Weil Hibernate mappt das Feld standardmäßig auf die Spalte wert
+    // und in SQL-Schema heißt die Spalte aber betrag (und ist NOT NULL).
+    @AttributeOverride(name = "wert", column = @Column(name = "betrag"))
+    private Betrag betrag; // Betrag (positiv = Einzahlung, negativ = Auszahlung)
 
     @Column(nullable = false)
     private String verwendungszweck; // Verwendungszweck
@@ -34,7 +38,7 @@ public class Kontoauszug {
         // Für JPA
     }
 
-    public Kontoauszug(IBAN girokontoIban, LocalDate datum, double betrag, String verwendungszweck) {
+    public Kontoauszug(IBAN girokontoIban, LocalDate datum, Betrag betrag, String verwendungszweck) {
         this.girokontoIban = girokontoIban;
         this.datum = datum;
         this.betrag = betrag;
@@ -53,7 +57,7 @@ public class Kontoauszug {
         return datum;
     }
 
-    public double getBetrag() {
+    public Betrag getBetrag() {
         return betrag;
     }
 
@@ -67,7 +71,7 @@ public class Kontoauszug {
                 "id=" + id +
                 ", girokontoIban=" + girokontoIban +
                 ", datum=" + datum +
-                ", betrag=" + betrag +
+                ", betrag=" + betrag.wert() +
                 ", verwendungszweck='" + verwendungszweck + '\'' +
                 '}';
     }

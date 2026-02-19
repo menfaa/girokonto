@@ -21,7 +21,7 @@ public class SEPAUeberweisung extends Kontoauszug { // SEPAUeberweisung erbt von
         // benötigt)
     }
 
-    public SEPAUeberweisung(IBAN girokontoIban, LocalDate datum, double betrag, String verwendungszweck,
+    public SEPAUeberweisung(IBAN girokontoIban, LocalDate datum, Betrag betrag, String verwendungszweck,
             String empfaengerIban, String empfaengerName) {
         super(girokontoIban, datum, betrag, verwendungszweck); // Aufruf des Konstruktors der Basisklasse
         this.empfaengerIban = empfaengerIban; // Setzt die Empfänger-IBAN
@@ -50,7 +50,7 @@ public class SEPAUeberweisung extends Kontoauszug { // SEPAUeberweisung erbt von
                 "id=" + getId() + // ID aus der Basisklasse
                 ", girokontoIban=" + getGirokontoIban() + // IBAN aus der Basisklasse
                 ", datum=" + getDatum() + // Datum aus der Basisklasse
-                ", betrag=" + getBetrag() + // Betrag aus der Basisklasse
+                ", betrag=" + getBetrag().wert() + // Betrag aus der Basisklasse
                 ", verwendungszweck='" + getVerwendungszweck() + '\'' + // Verwendungszweck aus der Basisklasse
                 ", empfaengerIban='" + empfaengerIban + '\'' + // Empfänger-IBAN aus dieser Klasse
                 ", empfaengerName='" + empfaengerName + '\'' + // Empfänger-Name aus dieser Klasse
