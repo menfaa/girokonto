@@ -1,6 +1,6 @@
 Dok1.docx
-src/main/resources/serverkeystore.jks
+gradle-ddd-girokonto/src/main/resources/serverkeystore.jks
 build/
 .gradle/
-vscode/
-../.gitignore
+.vscode/
+.gitignore
