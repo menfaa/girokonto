@@ -33,14 +33,29 @@ dependencies {
     // jMolecules for DDD annotations
     implementation 'org.jmolecules:jmolecules-ddd:1.7.0'
 
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+
+
     // H2 Database for in-memory testing (optional)
     //runtimeOnly 'com.h2database:h2:2.2.224'
 
     // Spring Boot Starter Test (JUnit, Mockito, @WebMvcTest, etc.)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+
+
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(Test) {
+    jvmArgs += [
+        '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.math=ALL-UNNAMED'
+    ]
 }

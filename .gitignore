@@ -3,4 +3,5 @@ gradle-ddd-girokonto/src/main/resources/serverkeystore.jks
 build/
 .gradle/
 .vscode/
+.vscode/settings.json
 .gitignore

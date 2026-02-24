@@ -1,4 +1,4 @@
-package com.bank.security;
+package com.bank.middleware.security;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

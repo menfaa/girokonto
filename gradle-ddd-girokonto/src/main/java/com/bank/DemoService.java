@@ -5,13 +5,16 @@ import com.bank.konto.Girokonto;
 import com.bank.konto.IBAN;
 import com.bank.konto.Kontoauszug;
 import com.bank.konto.Kontostand;
+import com.bank.middleware.security.*;
 import com.bank.service.GirokontoService;
 import com.bank.service.PaymentService;
 import com.bank.api.PaymentStrategy;
+import com.bank.impl.EmailBenachrichtigungObserver;
 import com.bank.impl.KartenPaymentStrategy;
+import com.bank.impl.PushBenachrichtigungObserver;
 import com.bank.impl.SepaPaymentStrategy;
 import com.bank.inhaber.InhaberID;
-import com.bank.security.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,8 @@ public class DemoService {
                 IBAN iban = new IBAN("DE12345678901234567890");
                 InhaberID inhaberId = new InhaberID("INHABER123");
                 Girokonto girokonto = new Girokonto(iban, inhaberId);
+                girokonto.addObserver(new PushBenachrichtigungObserver());
+                girokonto.addObserver(new EmailBenachrichtigungObserver());
 
                 log.info("Neues Girokonto angelegt: {}", girokonto);
 

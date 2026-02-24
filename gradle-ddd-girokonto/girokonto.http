@@ -1,17 +1,31 @@
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "geheim"
+}
+
+###
 GET http://localhost:8080/api/girokonten
-X-Auth-Token: geheim
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzcxOTQ0OTYwLCJleHAiOjE3NzE5NDg1NjB9.q0PYzDH3-Fe_Vf3PkDw0FiyY4UKzVVvz6efuvJHzK-Y
 
 ###
 GET http://localhost:8080/api/girokonten/DE12345678901234567890
-X-Auth-Token: geheim
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzcxOTQ0MjkzLCJleHAiOjE3NzE5NDc4OTN9.TXzE-dgmiM6AkjLXCV-VhWz_u6kDiNZUuddOmJ_E69M
 
 ###
 GET http://localhost:8080/api/girokonten/DE12345678901234567891
-X-Auth-Token: geheim
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzcxOTQ0MjkzLCJleHAiOjE3NzE5NDc4OTN9.TXzE-dgmiM6AkjLXCV-VhWz_u6kDiNZUuddOmJ_E69M
+
+###
+#GET http://localhost:8080/api/girokonten/DE12345678901234567891
+#X-Auth-Token: geheim
 
 ###
 POST http://localhost:8080/api/girokonten
-X-Auth-Token: geheim
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzcxOTQ0OTYwLCJleHAiOjE3NzE5NDg1NjB9.q0PYzDH3-Fe_Vf3PkDw0FiyY4UKzVVvz6efuvJHzK-Y
 Content-Type: application/json
 
 {
@@ -21,4 +35,4 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/api/girokonten/DE12345678901234567891
-X-Auth-Token: geheim
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzcxOTQ0MjkzLCJleHAiOjE3NzE5NDc4OTN9.TXzE-dgmiM6AkjLXCV-VhWz_u6kDiNZUuddOmJ_E69M

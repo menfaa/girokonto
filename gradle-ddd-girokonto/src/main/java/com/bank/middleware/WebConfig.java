@@ -3,8 +3,7 @@ package com.bank.middleware;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.bank.middleware.filter.AuthFilter;
+import com.bank.middleware.filter.JwtAuthFilter;
 import com.bank.middleware.filter.LoggingFilter;
 
 @Configuration
@@ -20,11 +19,23 @@ public class WebConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<AuthFilter> authFilter() {
-        FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new AuthFilter());
-        registrationBean.addUrlPatterns("/*");
+    public FilterRegistrationBean<JwtAuthFilter> jwtAuthFilter() {
+        FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new JwtAuthFilter());
+        registrationBean.addUrlPatterns("/api/*"); // oder andere Pfade
         registrationBean.setOrder(2);
         return registrationBean;
     }
+
+    /*
+     * @Bean
+     * public FilterRegistrationBean<AuthFilter> authFilter() {
+     * FilterRegistrationBean<AuthFilter> registrationBean = new
+     * FilterRegistrationBean<>();
+     * registrationBean.setFilter(new AuthFilter());
+     * registrationBean.addUrlPatterns("/*");
+     * registrationBean.setOrder(2);
+     * return registrationBean;
+     * }
+     */
 }

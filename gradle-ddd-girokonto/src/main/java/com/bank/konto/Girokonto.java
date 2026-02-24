@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.jmolecules.ddd.annotation.AggregateRoot; // DDD-Annotation für Aggregate Root
 import org.jmolecules.ddd.annotation.Identity; // DDD-Annotation für Identity
 
+import com.bank.api.KontoObserver;
 import com.bank.inhaber.InhaberID; // Import des Value Objects InhaberID
 
 import java.util.ArrayList; // Für die Initialisierung der Kontoauszugsliste
@@ -32,6 +33,23 @@ public class Girokonto {
     @Embedded // Das Feld ist ein eingebettetes Value Object (Kontostand)
     private Kontostand kontostand = new Kontostand(new Betrag(0.0)); // Initialer Kontostand ist 0.0
 
+    @Transient
+    private List<KontoObserver> observers = new ArrayList<>();
+
+    public void addObserver(KontoObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(KontoObserver observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers(Kontoauszug auszug) {
+        for (KontoObserver observer : observers) {
+            observer.update(this, auszug);
+        }
+    }
+
     protected Girokonto() {
         // Geschützter Standardkonstruktor für JPA (wird für das Laden aus der DB
         // benötigt)
@@ -57,6 +75,7 @@ public class Girokonto {
     // Methode zum Hinzufügen eines Kontoauszugs
     public void addKontoauszug(Kontoauszug kontoauszug) {
         kontoauszuege.add(kontoauszug); // Fügt einen Kontoauszug zur Liste hinzu
+        notifyObservers(kontoauszug);
         // Optional: Kontostand aktualisieren
         Betrag betrag = new Betrag(this.kontostand.betrag().wert() + kontoauszug.getBetrag().wert());
         this.kontostand = new Kontostand(betrag);
