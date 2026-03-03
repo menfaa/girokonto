@@ -1,0 +1,37 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/girokonto
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_FLYWAY_ENABLED: true
+      SPRING_FLYWAY_LOCATIONS: classpath:db/migration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      db:
+        condition: service_healthy # Wartet, bis die Datenbank bereit ist
+
+  db:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_DB: girokonto
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/14/main # Versionsspezifisches Verzeichnis
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d girokonto"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
